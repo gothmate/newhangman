@@ -10,6 +10,7 @@ import Footer from "./components/Footer/Footer"
 export default function Home() {
 
   const [hanged, setHanged] = useState('./hangman_start.svg')
+  const [disable, setDisable] = useState(false)
   const [life, setLife] = useState(5)
   const [erros, setErros] = useState<string[]>([])
   const [chosenMovie, setChosenMovie] = useState('')
@@ -38,6 +39,7 @@ export default function Home() {
       setHidden(updatedHidden);  // Atualiza o estado com os traços substituídos
       if (!updatedHidden.includes('__')) {
         setResult('Parabéns! Você venceu.')
+        setDisable(true)
       }
     } else {
       if (!erros.includes(tried)) {
@@ -46,6 +48,7 @@ export default function Home() {
         if (life === 1) {
           setResult(`O filme escolhido era: "${chosenMovie}".\nBoa sorte na próxima vida...`)
           setHanged('./hangman_dead.svg')
+          setDisable(true)
         }
       }
     }
@@ -55,6 +58,7 @@ export default function Home() {
     setWaiting('Aguardando resposta!')
     setHanged('./hangman_start.svg')
     setErros([])
+    setDisable(false)
     setResult('')
     setLife(5)
     const tempMovies: any = await getMovies()
@@ -88,15 +92,12 @@ export default function Home() {
       return letra === ' ' || !isAlpha(letra) && !isNumeric(letra) ? letra : '__'
     });
     setHidden(hiddenMovie)
-    console.log("hidden", hiddenMovie)
-    console.log(chosenMovie)
   }
 
   useEffect(() => {
     if (chosenMovie) {
       montagem()
     }
-    console.log(chosenMovie)
   }, [chosenMovie])
   
   useEffect(() => {
@@ -135,7 +136,7 @@ export default function Home() {
         </div>
         <div>{waiting}</div>
         <label>Digite uma letra: </label>
-        <input className={styles.try} onChange={e => handleTry(e)} />
+        <input className={styles.try} onChange={e => handleTry(e)} disabled={disable} />
         <button id={styles.replay} onClick={() => play()}>Play!</button>
         <div className={styles.result}>{result}</div>
       </div>
