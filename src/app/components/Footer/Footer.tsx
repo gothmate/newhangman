@@ -1,7 +1,7 @@
 export default function Footer() {
     return (
         <footer>
-            <p>Footer</p>
+            <p>Criado por Gate7 Enterprises</p>
         </footer>
     )
 }
