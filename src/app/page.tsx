@@ -47,22 +47,26 @@ export default function Home() {
   function checkTry(tried: string) {
     let correctGuess = false;
     const updatedHidden = [...hidden]
-
+  
     for (let i = 0; i < chosenMovie.length; i++) {
       if (tried === chosenMovie[i]) {
         correctGuess = true
         updatedHidden[i] = tried
       }
     }
-
+  
     if (correctGuess) {
-      const original = `Título Original: ${fullInfo.original_title || ''}`
-      const av_vote = `Classificação: ${(Number(fullInfo.vote_average) || 0) * 10}%`
-
-      setResult('Parabéns! Você venceu.')
-      setPoster(`https://image.tmdb.org/t/p/w200${fullInfo?.poster_path || ''}`)
-      setInfo([av_vote, original])
-      setDisable(true)
+      setHidden(updatedHidden)
+  
+      // Verifica se ainda há caracteres ocultos
+      if (!updatedHidden.includes('__')) {
+        const original = `Título Original: ${fullInfo.original_title || ''}`
+        const av_vote = `Classificação: ${(Number(fullInfo.vote_average) || 0) * 10}%`
+        setResult('Parabéns! Você venceu.')
+        setPoster(`https://image.tmdb.org/t/p/w200${fullInfo?.poster_path || ''}`)
+        setInfo([av_vote, original])
+        setDisable(true)
+      }
     } else {
       if (!erros.includes(tried)) {
         setErros([...erros, tried])
@@ -78,8 +82,8 @@ export default function Home() {
         }
       }
     }
-    
   }
+  
 
   async function play() {
     setWaiting('Aguardando resposta!')
