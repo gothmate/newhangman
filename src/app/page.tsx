@@ -15,6 +15,7 @@ export default function Home() {
   const [chosenMovie, setChosenMovie] = useState('')
   const [hidden, setHidden] = useState<string[]>([])
   const [result, setResult] = useState('')
+  const [waiting, setWaiting] = useState('')
 
   function handleTry(e: ChangeEvent<HTMLInputElement>) {
     const tried = e.target.value.toLowerCase()
@@ -51,13 +52,15 @@ export default function Home() {
   }
 
   async function play() {
-    console.log('Aguardando resposta!')
+    setWaiting('Aguardando resposta!')
     setHanged('./hangman_start.svg')
     setErros([])
     setResult('')
     setLife(5)
     const tempMovies: any = await getMovies()
+    setWaiting('')
     selectMovie(JSON.parse(tempMovies))
+    
   }
 
   function selectMovie(temp: any) {
@@ -69,6 +72,7 @@ export default function Home() {
     } while (!regex.test(temp.results[indice].title))
   
     setChosenMovie(temp.results[indice].title.toLowerCase())
+    montagem()
   }
 
   function isAlpha(char: string) {
@@ -81,13 +85,11 @@ export default function Home() {
 
   function montagem() {
     const hiddenMovie = chosenMovie.split('').map(letra => {
-      if (letra === ' ' || !isAlpha(letra) && !isNumeric(letra)) {
-        return letra;
-      }
-      return '__';
+      return letra === ' ' || !isAlpha(letra) && !isNumeric(letra) ? letra : '__'
     });
-
-    setHidden(hiddenMovie);
+    setHidden(hiddenMovie)
+    console.log("hidden", hiddenMovie)
+    console.log(chosenMovie)
   }
 
   useEffect(() => {
@@ -96,6 +98,13 @@ export default function Home() {
     }
     console.log(chosenMovie)
   }, [chosenMovie])
+  
+  useEffect(() => {
+    if (chosenMovie) { 
+      montagem()
+    }
+  }, [chosenMovie])
+
   
   return (
     <div className={styles.page}>
@@ -124,6 +133,7 @@ export default function Home() {
             ))}
           <span>)</span>
         </div>
+        <div>{waiting}</div>
         <label>Digite uma letra: </label>
         <input className={styles.try} onChange={e => handleTry(e)} />
         <button id={styles.replay} onClick={() => play()}>Play!</button>
