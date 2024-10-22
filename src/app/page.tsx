@@ -8,20 +8,20 @@ import Header from "./components/Header"
 import Footer from "./components/Footer/Footer"
 
 interface IFullInfo {
-  adult: Boolean
-  backdrop_path: String
-  genre_ids: Number[]
-  id: Number
-  original_language: String
-  original_title: String 
-  overview: String
-  popularity: Number
-  poster_path: String
-  release_date: String
-  title: String
-  video: Boolean
-  vote_average?: Number
-  vote_count: Number
+  adult: boolean
+  backdrop_path: string
+  genre_ids: number[]
+  id: number
+  original_language: string
+  original_title: string 
+  overview: string
+  popularity: number
+  poster_path: string
+  release_date: string
+  title: string
+  video: boolean
+  vote_average?: number
+  vote_count: number
 }
 
 export default function Home() {
