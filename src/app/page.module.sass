@@ -47,6 +47,7 @@
   box-shadow: 2px 2px 10px #000000be
 
 .hanger
+  display: flex
   position: relative
   margin: 3rem 2rem 0
   & img
@@ -74,6 +75,23 @@
       bottom: 0.1rem
       left: 0.1rem
       background: #fff
+  .info
+    display: flex
+    gap: 1rem
+    height: 200px
+    width: auto
+
+    .poster
+      display: grid
+      place-content: center
+      width: 135px
+      height: 200px
+      font-size: 60pt
+      & p
+        font-size: 1rem
+      & img
+        width: auto
+        height: 100%
 
 .container
   margin-top: 2rem
@@ -111,6 +129,7 @@
   &:hover
     animation: 1s pulse infinite
     transition: 600ms fade-out(#fff, 0.8%)
+
 
 @keyframes pulse
   0%, 100%

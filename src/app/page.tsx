@@ -7,16 +7,36 @@ import {getMovies} from '@/api/gets'
 import Header from "./components/Header"
 import Footer from "./components/Footer/Footer"
 
+interface IFullInfo {
+  adult: Boolean
+  backdrop_path: String
+  genre_ids: Number[]
+  id: Number
+  original_language: String
+  original_title: String 
+  overview: String
+  popularity: Number
+  poster_path: String
+  release_date: String
+  title: String
+  video: Boolean
+  vote_average?: Number
+  vote_count: Number
+}
+
 export default function Home() {
 
   const [hanged, setHanged] = useState('./hangman_start.svg')
   const [disable, setDisable] = useState(false)
   const [life, setLife] = useState(5)
+  const [info, setInfo] = useState<string[]>([])
   const [erros, setErros] = useState<string[]>([])
+  const [fullInfo, setfullInfo] = useState<IFullInfo>({} as any)
   const [chosenMovie, setChosenMovie] = useState('')
   const [hidden, setHidden] = useState<string[]>([])
   const [result, setResult] = useState('')
   const [waiting, setWaiting] = useState('')
+  const [poster, setPoster] = useState('?')
 
   function handleTry(e: ChangeEvent<HTMLInputElement>) {
     const tried = e.target.value.toLowerCase()
@@ -36,28 +56,36 @@ export default function Home() {
     }
 
     if (correctGuess) {
-      setHidden(updatedHidden);  // Atualiza o estado com os traços substituídos
-      if (!updatedHidden.includes('__')) {
-        setResult('Parabéns! Você venceu.')
-        setDisable(true)
-      }
+      const original = `Título Original: ${fullInfo.original_title || ''}`
+      const av_vote = `Classificação: ${(Number(fullInfo.vote_average) || 0) * 10}%`
+
+      setResult('Parabéns! Você venceu.')
+      setPoster(`https://image.tmdb.org/t/p/w200${fullInfo?.poster_path || ''}`)
+      setInfo([av_vote, original])
+      setDisable(true)
     } else {
       if (!erros.includes(tried)) {
         setErros([...erros, tried])
         setLife(life - 1)
         if (life === 1) {
+          const original = `Título Original: ${fullInfo.original_title || ''}`
+          const av_vote = `Classificação: ${(Number(fullInfo.vote_average) || 0) * 10}%`
           setResult(`O filme escolhido era: "${chosenMovie}".\nBoa sorte na próxima vida...`)
           setHanged('./hangman_dead.svg')
+          setPoster(`https://image.tmdb.org/t/p/w200${fullInfo?.poster_path || ''}`)
+          setInfo([av_vote, original])
           setDisable(true)
         }
       }
     }
+    
   }
 
   async function play() {
     setWaiting('Aguardando resposta!')
     setHanged('./hangman_start.svg')
     setErros([])
+    setInfo([])
     setDisable(false)
     setResult('')
     setLife(5)
@@ -75,6 +103,8 @@ export default function Home() {
       indice = Math.floor(Math.random() * 20)
     } while (!regex.test(temp.results[indice].title))
   
+    setfullInfo(temp.results[indice])
+    setPoster('?')
     setChosenMovie(temp.results[indice].title.toLowerCase())
     montagem()
   }
@@ -100,13 +130,6 @@ export default function Home() {
     }
   }, [chosenMovie])
   
-  useEffect(() => {
-    if (chosenMovie) { 
-      montagem()
-    }
-  }, [chosenMovie])
-
-  
   return (
     <div className={styles.page}>
       <Header />
@@ -114,12 +137,28 @@ export default function Home() {
       <div className={styles.hanger}>
         <Image 
           className={styles.hangman} 
-          width={300}
-          height={300}
+          width={200}
+          height={200}
           src={hanged}
           alt="hangman"
           priority
         />
+        <div className={styles.info}>
+          <div className={styles.poster}>
+            {poster !== "?" ? <Image   
+              width={100}
+              height={100}
+              src={poster}
+              alt='poster'
+              priority
+            /> : poster}
+          </div>
+          <div>
+            <p>{info[0]}</p>
+            <p>{info[1]}</p>
+            
+          </div>
+        </div>
       </div>
       <div className={styles.container}>
         <ul id="ul">
@@ -130,7 +169,7 @@ export default function Home() {
         <div className={styles.letrasErradas}>
           <span>Erros: (</span>
             {erros.map((el: string, index: number) => (
-              <span key={index}>{el}, </span>
+              <span key={index}>{el} </span>
             ))}
           <span>)</span>
         </div>
@@ -143,5 +182,5 @@ export default function Home() {
       </main>
       <Footer />
     </div>
-  );
+  )
 }
