@@ -9,44 +9,66 @@ import Footer from "./components/Footer/Footer"
 
 export default function Home() {
 
-  const [selections, setSelections] = useState([] as any)
   const [hanged, setHanged] = useState('./hangman_start.svg')
-  const [life, setLife] = useState(6)
-  const [erros, setErros] = useState([])
+  const [life, setLife] = useState(5)
+  const [erros, setErros] = useState<string[]>([])
   const [chosenMovie, setChosenMovie] = useState('')
   const [hidden, setHidden] = useState<string[]>([])
   const [result, setResult] = useState('')
-  const [tries, setTries] = useState<string[]>([])
 
   function handleTry(e: ChangeEvent<HTMLInputElement>) {
-    
+    const tried = e.target.value.toLowerCase()
+    checkTry(tried)
+    e.target.value = ''
+  }
+
+  function checkTry(tried: string) {
+    let correctGuess = false;
+    const updatedHidden = [...hidden]
+
+    for (let i = 0; i < chosenMovie.length; i++) {
+      if (tried === chosenMovie[i]) {
+        correctGuess = true
+        updatedHidden[i] = tried
+      }
+    }
+
+    if (correctGuess) {
+      setHidden(updatedHidden);  // Atualiza o estado com os traços substituídos
+      if (!updatedHidden.includes('__')) {
+        setResult('Parabéns! Você venceu.')
+      }
+    } else {
+      if (!erros.includes(tried)) {
+        setErros([...erros, tried])
+        setLife(life - 1)
+        if (life === 1) {
+          setResult(`O filme escolhido era: "${chosenMovie}".\nBoa sorte na próxima vida...`)
+          setHanged('./hangman_dead.svg')
+        }
+      }
+    }
   }
 
   async function play() {
-    console.log('Clicado!')
+    console.log('Aguardando resposta!')
+    setHanged('./hangman_start.svg')
+    setErros([])
+    setResult('')
+    setLife(5)
     const tempMovies: any = await getMovies()
-    setSelections(JSON.parse(tempMovies))
     selectMovie(JSON.parse(tempMovies))
-    montagem()
   }
 
   function selectMovie(temp: any) {
     const regex = /^[A-Za-z0-9\s.,;!?'"()\-]+$/
-
-    let indice = Math.floor(Math.random() * 20)
-    console.log("FORA:", indice)
-    while(true) {
-      if(!regex.test(temp.results[indice].title)) {
-        indice = Math.floor(Math.random() * 20)
-        console.log("filme:", temp.results[indice].title)
-        console.log("Dentro:", indice)
-      } else {
-        console.log("Saindo", indice)
-        break
-      }
-    }
+    let indice = undefined
+  
+    do {
+      indice = Math.floor(Math.random() * 20)
+    } while (!regex.test(temp.results[indice].title))
+  
     setChosenMovie(temp.results[indice].title.toLowerCase())
-    console.log("SECRET:", chosenMovie)
   }
 
   function isAlpha(char: string) {
@@ -58,33 +80,22 @@ export default function Home() {
   }
 
   function montagem() {
-    setHanged('./hangman_start.svg')
-    setLife(6)
-    let hiddenMovie = []
-
-    for(let i = 0; i < chosenMovie.length; i++) {
-      const letra = chosenMovie[i]
-
-      if(letra === ' ') {
-        hiddenMovie.push(letra)
-      } else if (!isAlpha(letra) && !isNumeric(letra)) {
-        hiddenMovie.push(letra);
-      } else {
-        hiddenMovie.push('__');
+    const hiddenMovie = chosenMovie.split('').map(letra => {
+      if (letra === ' ' || !isAlpha(letra) && !isNumeric(letra)) {
+        return letra;
       }
-    }
-    if (!hiddenMovie.includes('__')) {
-      setResult('Parabéns! Você venceu.')
-    } 
-    if(!hiddenMovie.includes('__') && life === 0) {
-      setHanged('./hangman_dead.svg')
-    }
-    else {
-      setResult('')
-    }
+      return '__';
+    });
 
-    setHidden(hiddenMovie)
+    setHidden(hiddenMovie);
   }
+
+  useEffect(() => {
+    if (chosenMovie) {
+      montagem()
+    }
+    console.log(chosenMovie)
+  }, [chosenMovie])
   
   return (
     <div className={styles.page}>
@@ -103,10 +114,16 @@ export default function Home() {
       <div className={styles.container}>
         <ul id="ul">
           {hidden.map((el, index) => (
-            <li key={index}>{el}</li>
+            <li key={index}>{el} </li>
           ))}
         </ul>
-        <div className={styles.letrasErradas}></div>
+        <div className={styles.letrasErradas}>
+          <span>Erros: (</span>
+            {erros.map((el: string, index: number) => (
+              <span key={index}>{el}, </span>
+            ))}
+          <span>)</span>
+        </div>
         <label>Digite uma letra: </label>
         <input className={styles.try} onChange={e => handleTry(e)} />
         <button id={styles.replay} onClick={() => play()}>Play!</button>
