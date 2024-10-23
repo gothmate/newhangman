@@ -108,7 +108,6 @@ export default function Home() {
     } while (!regex.test(temp.results[indice].title))
   
     setfullInfo(temp.results[indice])
-    console.log(fullInfo)
     setPoster('?')
     setChosenMovie(temp.results[indice].title.toLowerCase())
     montagem()
