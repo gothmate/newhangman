@@ -108,6 +108,7 @@ export default function Home() {
     } while (!regex.test(temp.results[indice].title))
   
     setfullInfo(temp.results[indice])
+    console.log(fullInfo)
     setPoster('?')
     setChosenMovie(temp.results[indice].title.toLowerCase())
     montagem()
@@ -138,29 +139,31 @@ export default function Home() {
     <div className={styles.page}>
       <Header />
       <main className={styles.main}>
-      <div className={styles.hanger}>
-        <Image 
-          className={styles.hangman} 
-          width={200}
-          height={200}
-          src={hanged}
-          alt="hangman"
-          priority
-        />
-        <div className={styles.info}>
-          <div className={styles.poster}>
-            {poster !== "?" ? <Image   
-              width={100}
-              height={100}
-              src={poster}
-              alt='poster'
-              priority
-            /> : poster}
-          </div>
-          <div>
-            <p>{info[0]}</p>
-            <p>{info[1]}</p>
-            
+      <div className={styles.container}>
+        <div className={styles.hanger}>
+          <Image 
+            className={styles.hangman} 
+            width={200}
+            height={200}
+            src={hanged}
+            alt="hangman"
+            priority
+          />
+          <div className={styles.info}>
+            <div className={styles.poster}>
+              {poster !== "?" ? <Image   
+                width={100}
+                height={100}
+                src={poster}
+                alt='poster'
+                priority
+              /> : poster}
+            </div>
+            <div>
+              <p>{info[0]}</p>
+              <p>{info[1]}</p>
+              
+            </div>
           </div>
         </div>
       </div>
