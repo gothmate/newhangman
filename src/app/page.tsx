@@ -61,7 +61,7 @@ export default function Home() {
       // Verifica se ainda há caracteres ocultos
       if (!updatedHidden.includes('__')) {
         const original = `Título Original: ${fullInfo.original_title || ''}`
-        const av_vote = `Classificação: ${(Number(fullInfo.vote_average) || 0) * 10}%`
+        const av_vote = `Classificação: ${((Number(fullInfo.vote_average) || 0) * 10).toFixed(0)}%`
         setResult('Parabéns! Você venceu.')
         setPoster(`https://image.tmdb.org/t/p/w200${fullInfo?.poster_path || ''}`)
         setInfo([av_vote, original])
@@ -73,7 +73,7 @@ export default function Home() {
         setLife(life - 1)
         if (life === 1) {
           const original = `Título Original: ${fullInfo.original_title || ''}`
-          const av_vote = `Classificação: ${(Number(fullInfo.vote_average) || 0) * 10}%`
+          const av_vote = `Classificação: ${((Number(fullInfo.vote_average) || 0) * 10).toFixed(0)}%`
           setResult(`O filme escolhido era: "${chosenMovie}".\nBoa sorte na próxima vida...`)
           setHanged('./hangman_dead.svg')
           setPoster(`https://image.tmdb.org/t/p/w200${fullInfo?.poster_path || ''}`)
