@@ -4,8 +4,9 @@ import Image from "next/image"
 import styles from "./page.module.sass"
 import { ChangeEvent, useEffect, useState } from "react"
 import {getMovies} from '@/api/gets'
-import Header from "./components/Header"
-import Footer from "./components/Footer/Footer"
+import Header from "@/components/Header"
+import Footer from "@/components/Footer/Footer"
+import Hanger from "@/components/Hanger/Hanger"
 
 interface IFullInfo {
   adult: boolean
@@ -139,32 +140,7 @@ export default function Home() {
       <Header />
       <main className={styles.main}>
       <div className={styles.container}>
-        <div className={styles.hanger}>
-          <Image 
-            className={styles.hangman} 
-            width={200}
-            height={200}
-            src={hanged}
-            alt="hangman"
-            priority
-          />
-          <div className={styles.info}>
-            <div className={styles.poster}>
-              {poster !== "?" ? <Image   
-                width={100}
-                height={100}
-                src={poster}
-                alt='poster'
-                priority
-              /> : poster}
-            </div>
-            <div>
-              <p>{info[0]}</p>
-              <p>{info[1]}</p>
-              
-            </div>
-          </div>
-        </div>
+        <Hanger hanged={hanged} poster={poster} info={info} />
       </div>
       <div className={styles.container}>
         <ul id="ul">
