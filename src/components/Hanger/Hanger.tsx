@@ -1,19 +1,19 @@
 import Image from "next/image";
-import styles from '@/app/page.module.sass'
+import style from './page.module.sass'
 
 export default function Hanger(props: any) {
     return (
-        <div className={styles.hanger}>
+        <div className={style.hanger}>
           <Image 
-            className={styles.hangman} 
+            className={style.hangman} 
             width={200}
             height={200}
             src={props.hanged}
             alt="hangman"
             priority
           />
-          <div className={styles.info}>
-            <div className={styles.poster}>
+          <div className={style.info}>
+            <div className={style.poster}>
               {props.poster !== "?" ? <Image   
                 width={100}
                 height={100}

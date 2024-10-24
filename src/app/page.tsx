@@ -87,7 +87,7 @@ export default function Home() {
   
 
   async function play() {
-    setWaiting('Aguardando resposta!')
+    setWaiting('Aguardando resposta do servidor!')
     setHanged('./hangman_start.svg')
     setErros([])
     setInfo([])
@@ -140,28 +140,28 @@ export default function Home() {
     <div className={styles.page}>
       <Header />
       <main className={styles.main}>
-      <div className={styles.container}>
-        <Hanger hanged={hanged} poster={poster} info={info} />
-      </div>
-      <div className={styles.container}>
-        <ul id="ul">
-          {hidden.map((el, index) => (
-            <li key={index}>{el} </li>
-          ))}
-        </ul>
-        <div className={styles.letrasErradas}>
-          <span>Erros: (</span>
-            {erros.map((el: string, index: number) => (
-              <span key={index}>{el} </span>
-            ))}
-          <span>)</span>
+        <div className={styles.container}>
+          <Hanger hanged={hanged} poster={poster} info={info} />
         </div>
-        <div>{waiting}</div>
-        <label>Digite uma letra: </label>
-        <input className={styles.try} onChange={e => handleTry(e)} disabled={disable} />
-        <button id={styles.replay} onClick={() => play()}>Play!</button>
-        <div className={styles.result}>{result}</div>
-      </div>
+        <div className={styles.container}>
+          <ul id="ul">
+            {hidden.map((el, index) => (
+              <li key={index}>{el} </li>
+            ))}
+          </ul>
+          <div className={styles.letrasErradas}>
+            <span>Erros: ( </span>
+              {erros.map((el: string, index: number) => (
+                <span className={styles.erros} key={index}>{el} </span>
+              ))}
+            <span>)</span>
+          </div>
+          <div>{waiting}</div>
+          <label>Digite uma letra: </label>
+          <input className={styles.try} onChange={e => handleTry(e)} disabled={disable} />
+          <button id={styles.replay} onClick={() => play()}>Play!</button>
+          <div className={styles.result}>{result}</div>
+        </div>
       </main>
       <Footer />
     </div>
