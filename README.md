@@ -9,7 +9,7 @@ https://www.themoviedb.org/settings/api
 
 Crie a sua APIKey e crie o arquivo .env na raiz do projeto com o seguinte conteúdo:
 
-TMDBAUTH='Bearer <sua APIKey>'
+TMDBAUTH='Bearer suaAPIKey'
 
 Fiquem à vontade para criar forks ou abrir Issues, caso encontrem alguma.
 Só peço que "caso usem o projeto", dêem os devidos créditos.
