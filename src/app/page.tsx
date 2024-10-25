@@ -1,6 +1,5 @@
 'use client'
 
-import Image from "next/image"
 import styles from "./page.module.sass"
 import { ChangeEvent, useEffect, useState } from "react"
 import {getMovies} from '@/api/gets'
