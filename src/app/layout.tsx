@@ -1,27 +1,15 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.sass";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff2", // Consider using woff2 for better performance
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff2",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import type { Metadata } from "next"
+import "./globals.sass"
 
 export const metadata: Metadata = {
   title: "Hangman",
   description: "Jogo da Forca",
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="pt-br">
@@ -34,9 +22,9 @@ export default function RootLayout({
           crossOrigin="anonymous"
         ></script>
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body>
         {children}
       </body>
     </html>
-  );
+  )
 }
